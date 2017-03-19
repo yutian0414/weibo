@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
+
+	{% if form.subject.errors %}
+		{% for error in form.subject.errors %}
+			{{error}}
+		{% endfor %}
+	{% endif %}
+</body>
+</html>

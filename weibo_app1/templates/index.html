@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <style type="text/css">
+    #copyright {
+        width: 100%;
+        background-color: rgb(83, 134, 100);
+        text-align: center;
+        font-size: 25px;
+    }
+    
+    #body {
+        width: 100%;
+        background-color: rgb(123, 134, 100);
+        text-align: left;
+    }
+    
+    #sign_in {
+        margin: auto;
+    }
+    
+    #contenter {
+        width: 50%;
+        margin: 7% auto;
+        padding: 1%;
+        border-style: outset;
+        border-width: 10px;
+        border-color: black;
+    }
+    
+    #info {
+        line-height: 200%;
+        font-size: 30px;
+    }
+    
+    .sign_in_item {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    
+    .legend {
+        font-size: 35px;
+        font-weight: bold;
+    }
+    
+    .welcome {
+        font-weight: bold;
+        font-size: 35px;
+        font-style: italic;
+        text-align: center;
+    }
+    
+    .tips {
+        font-size: 30px;
+    }
+    table tr{
+    	height: 60px;
+    }
+    </style>
+    <title>Welcome to Weibo</title>
+</head>
+
+<body>
+    <div id="contenter">
+        <div id="body">
+            <div id="sign_in">
+                <p class="welcome">Welcome to Weibo made by Jerry!</p>
+                <p class="tips">Please sign in frist before use it!</p>
+                <form action="/sign_in/" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <legend class="legend">Sign in</legend>
+                        <table id="login_table">
+                            <tr id="name_row" class="tr">
+                                <td class="sign_in_item">
+                                    username:
+                                </td>
+                                <td>
+                                    <input id="name" type="text" name="name">
+                                </td>
+                                <td id='namenotexist' class="sign_in_item">
+                                <p></p>
+                                </td>
+                            </tr>
+                            <tr id="sercert_code_row" class="tr">
+                                <td class="sign_in_item">
+                                    sercert code:
+                                </td>
+                                <td>
+                                    <input id="password" type="password" name="password">
+                                </td>
+                                <td id='passwordnotcorrect' class="sign_in_item">
+                                <p></p>
+                                </td>
+                            </tr>
+                            <tr class="tr">
+                                <td class="sign_in_item">
+                                    Submit:
+                                </td>
+                                <td>
+                                    <button type="button" id="Submit" class="sign_in_item">Submit</button>
+                                </td>
+                            </tr>
+                            <tr class="tr">
+                                <td colspan="2">
+                                    <p class="tips">Do not have a account? You could click here to <a href="/sign_up/" style="background-color:white">sign up</a></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            </div>
+            <div id="info">
+                <ul>
+                    <li> You could used it to share your status and motions or other instreating things.</li>
+                    <li>You could make friend at this website.</li>
+                    <li>You could chat with your friend or family.</li>
+                </ul>
+            </div>
+        </div>
+        <div id="copyright">
+            <pre>Copy Right:Jerry.Cao    Email:yutian0414@126.com</pre>
+        </div>
+    </div>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('button#Submit').click(function() {
+            var name = $('input#name').val();
+            var password = $("input#password").val();
+            alert(name, password);
+            $.post("/sign_in/", {
+                'name': name,
+                "password": password
+            }, function(ret) {
+                if (ret.username == "False") {
+                	$("#namenotexist").html("<p>Name is not exist</p>")
+                	$("#passwordnotcorrect").html("<p></p>")
+
+                } else if ("False" == ret.password) {
+                    $("#namenotexist").html("<p></p>")
+                	$("#passwordnotcorrect").html("<p>Password not correct</p>")
+                    }else {
+                    window.location.href = "/home/" + ret.username + '/' + ret.password + '/';
+                }
+            })
+        })
+
+    })
+    </script>
+</body>
+
+</html>

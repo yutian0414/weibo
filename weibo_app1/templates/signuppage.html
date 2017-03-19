@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Weibo Sign up</title>
+</head>
+<body>
+
+	<form action='/sign_up/' method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	
+		{% for field in form %}
+			
+			<p>{{ field.label_tag }}{{field}} &nbsp;&nbsp;&nbsp;&nbsp; <strong style="color:red">{{ field.errors }}</strong></p>
+		{% endfor %}
+	
+<br>
+<input type="submit" name="commit" value="Commit">
+
+	</form>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style type="text/css">
+    #weibo_area {
+        width: 70%;
+        background-color: blue;
+        margin: auto;
+        border-style: solid;
+        border-width: 5px;
+        height: 800px;
+    }
+    
+    #left_area {
+        float: left;
+        width: 30%;
+        height: 100%;
+        background-color: red;
+        border-style: solid;
+        border-width: 3px;
+        border-color: white;
+        padding: 0px;
+        margin: 0px;
+    }
+    
+    #user_info {
+        height: 15%;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    #navigation {
+        height: 5%;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8em;
+        font-weight: bold;
+        border-style: solid;
+    }
+    
+    #list {
+        height: 76%;
+        border-style: solid;
+    }
+    
+    #right_area {
+        float: right;
+        width: 68%;
+        height: 100%;
+    }
+    
+    #title_show {
+        height: 10%;
+        font-size: 30px;
+        font-weight: bold;
+        font-style: italic;
+        color: black;
+        text-align: center;
+        border-style: solid;
+    }
+    
+    #content_body {
+        height: 60%;
+        border-style: solid;
+    }
+    
+    #text_input {
+        height: 28%;
+        border-style: solid;
+    }
+    
+    #username {
+        width: 30%;
+        height: 100%;
+        font-size: 1em;
+        float: left;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    #userimage {
+        width: 50%;
+        height: 100%;
+        float: left;
+    }
+    
+    #useradd {
+        float: left;
+        text-align: center;
+        font-size: 1em;
+        font-weight: bold;
+        height: 100%;
+    }
+    
+    img.userimage {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        padding: auto;
+    }
+    
+    #navigation_table {
+        width: 100%
+    }
+    
+    td.navigation_iterm {
+        width: 30%;
+    }
+    </style>
+    <title>weibo of {{ user.name }}</title>
+</head>
+
+<body>
+    <div id="weibo_area" class="weibo_area">
+        <div id="left_area">
+            <div id="user_info">
+                <div id="userimage">
+                    <img class="userimage" src="../../../media{{ user.image }}" alt="user image">
+                </div>
+                <div id="username">
+                    <p>{{ user.name }}</p>
+                </div>
+                <div id="useradd">
+                    <p>more</p>
+                </div>
+            </div>
+            <div id="navigation">
+                <TABLE id="navigation_table">
+                    <tr>
+                        <td class="navigation_iterm" id="chart_with"> Chart With</td>
+                        <td class="navigation_iterm" id="status">Status</td>
+                        <td class="navigation_iterm" id="friend_list">Friend</td>
+                    </tr>
+                </TABLE>
+            </div>
+            <div id="list">
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+                <p>yutian</p>
+            </div>
+        </div>
+        <div id="right_area">
+            <div id="title_show">
+                <p>friends or status or show friend's info</p>
+            </div>
+            <div id="content_body">
+                <p>massage or status from friend</p>
+                <br>
+                <br>
+                <br>
+            </div>
+            <div id="text_input">
+                <p>input your massage here when chat with your friend</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+$("#chart_with").click(function() {
+    alert("123")
+    alert({{ user.friend.all.name }})
+    $("#list").html("<p>friend list chart with rescently</p>")
+    $("#title_show").html("<p>Chart with</p>")
+     {% for friend in user.friend.all %}
+    $("#list").html.append("<p><img src={{friend.image}} width='40%' height='70%'> &nbsp;&nbsp; {{ friend.name }} </p>") 
+    {% endfor %}
+})
+
+$("#status").click(function() {
+    alert("123")
+    $("#list").html("<p>status list of friends</p>")
+    $("#title_show").html("<p>Status of friends </p>") 
+    {% for friend in user.friend.all %}
+    $("#list").html.append("<p><img src={{friend.image}} width='40%' height='70%'> &nbsp;&nbsp; {{ friend.name }} </p>") 
+    {% endfor %}
+})
+
+$("#friend_list").click(function() {
+    alert("123")
+    $("#list").html("<p>friend list of mine</p>")
+    $("#title_show").html("<p>friend's information </p>") 
+    {% for friend in user.friend.all %}
+    $("#list").html.append("<p><img src={{friend.image}} width='40%' height='70%'> &nbsp;&nbsp; {{ friend.name }} </p>") 
+    {% endfor %}
+})
+</script>
+
+</html>
