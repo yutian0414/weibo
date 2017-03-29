@@ -4,12 +4,11 @@
 <head>
     <style type="text/css">
     #weibo_area {
-        width: 70%;
+        width: 60%;
         background-color: blue;
+        height: 1000px;
         margin: auto;
-        border-style: solid;
-        border-width: 5px;
-        height: 800px;
+        padding: 0px;
     }
     
     #left_area {
@@ -17,11 +16,13 @@
         width: 30%;
         height: 100%;
         background-color: red;
-        border-style: solid;
-        border-width: 3px;
-        border-color: white;
-        padding: 0px;
-        margin: 0px;
+        border-color: black;
+        border-width: 5px;
+		margin: 0px;
+		padding: 0px;
+		box-sizing: border-box;
+
+
     }
     
     #user_info {
@@ -29,6 +30,7 @@
         width: 100%;
         margin: 0px;
         padding: 0px;
+
     }
     
     #navigation {
@@ -38,17 +40,26 @@
         font-size: 0.8em;
         font-weight: bold;
         border-style: solid;
+        box-sizing: border-box;
+
+
     }
     
     #list {
-        height: 76%;
+        height: 80%;
+        width: 100%
         border-style: solid;
+        overflow-y:auto;
+        box-sizing: border-box;
     }
     
     #right_area {
-        float: right;
-        width: 68%;
+        float: left;
+        width: 70%;
         height: 100%;
+        padding: 0px;
+        margin: 0px;
+
     }
     
     #title_show {
@@ -59,31 +70,47 @@
         color: black;
         text-align: center;
         border-style: solid;
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
     }
     
     #content_body {
         height: 60%;
         border-style: solid;
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
     }
     
     #text_input {
-        height: 28%;
+        height: 30%;
         border-style: solid;
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
     }
     
     #username {
-        width: 30%;
+        width: 25%;
         height: 100%;
         font-size: 1em;
         float: left;
         font-weight: bold;
         text-align: center;
+        line-height: 200%;
     }
     
     #userimage {
-        width: 50%;
+        width: 40%;
         height: 100%;
         float: left;
+        text-align: center;
+    }
+    #userimage span{
+    	display: inline-block;
+    	height: 100%;
+    	vertical-align: middle;
     }
     
     #useradd {
@@ -92,22 +119,112 @@
         font-size: 1em;
         font-weight: bold;
         height: 100%;
+        vertical-align: middle;
+        line-height: 700%;
     }
     
     img.userimage {
-        width: 100%;
-        height: 100%;
+        width: 80%;
+        height: 60%;
         margin: auto;
-        padding: auto;
+        vertical-align: middle;
+
     }
     
     #navigation_table {
-        width: 100%
+        width: 80%;
+        margin: auto;
+        padding-top: 3%;
+
     }
     
     td.navigation_iterm {
         width: 30%;
     }
+    .friendname{
+    	font-weight: bold;
+    	font-size: 1em;
+    	float: left;
+    	width: 45%;
+    	height: 100%;
+    	text-align: center;
+
+    }
+
+    .friend_info{
+		height: 10%;
+		width: 100%;
+		float: left;
+		border-style: solid;
+		text-align: center;
+		box-sizing: border-box;
+    }
+	.friendimage{
+		width: 50%;
+		height: 100%;
+		text-align: center;
+		float: left;
+	}
+	.friendimage img{
+		vertical-align: middle;
+	}
+	.friend_info span{
+		vertical-align: middle;
+		display: inline-block;
+		height: 100%;
+	}
+	.friendname{
+		line-height: 500%;
+	}
+	.status_friend_info{
+		width: 40%;
+		height: 100%;
+		float: left;
+		margin: 0px;
+		padding: 0px;
+	}
+	.status_friend_image{
+		width: 100%;
+		height: 60%;
+		float: left;
+		text-align: center;
+	}
+	.status_friend_name{
+		width: 100%;
+		height: 40%;
+		float: left;
+		text-align: center;
+		font-size: 15px;
+	}
+	.status_content{
+		width: 50%;
+		height: 100%;
+		float: right;
+		margin: 0px;
+		padding: 0px;
+	}
+	.status_friend_image img{
+		vertical-align: middle;
+	}
+	.image_2_1 .image_2_2 .image_3_1 .image_3_2 .image_3_3 .image_4_1 .image_4_2 .image_4_3 .image_4_4{
+		width: 50%;
+		float: left;
+		height: 100%;
+		text-align: center;
+	}
+	.text_input_area{
+		width: 99.5%;
+		height: 200px;
+
+	}
+	.input_submit{
+		width: 150px;
+		height: 50px;
+		font-size: 25px;
+		text-align: center;
+		float: right;
+	}
+
     </style>
     <title>weibo of {{ user.name }}</title>
 </head>
@@ -117,13 +234,19 @@
         <div id="left_area">
             <div id="user_info">
                 <div id="userimage">
-                    <img class="userimage" src="../../../media{{ user.image }}" alt="user image">
+                    <span></span><img class="userimage" src="../../../media{{ user.image }}" alt="user image">
                 </div>
-                <div id="username">
+                <div id="username" class="username">
+                	<p>Welcome</p>
                     <p>{{ user.name }}</p>
                 </div>
                 <div id="useradd">
-                    <p>more</p>
+                	<select>
+                		<option value="more">More</option>
+                		<option value="Set">Set</option>
+                		<option value="add _friend">Find Friend</option>
+                		<option value="logout"> Log Out</option>
+                	</select>
                 </div>
             </div>
             <div id="navigation">
@@ -136,18 +259,6 @@
                 </TABLE>
             </div>
             <div id="list">
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
-                <p>yutian</p>
             </div>
         </div>
         <div id="right_area">
@@ -161,40 +272,111 @@
                 <br>
             </div>
             <div id="text_input">
-                <p>input your massage here when chat with your friend</p>
+            	<form>
+            		<textarea class="text_input_area">
+            			
+            		</textarea>
+            		<input type="file" name="file" accept=".png,.jpg,.gif">
+
+            	</form>
+            	<button id='clear' class="input_submit">Clear</button>
+            	<button id='input' class="input_submit">Input</button>
+
+
             </div>
         </div>
     </div>
 </body>
 <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
+
+// return friend list chart with rescently.
 $("#chart_with").click(function() {
-    alert("123")
-    alert({{ user.friend.all.name }})
-    $("#list").html("<p>friend list chart with rescently</p>")
-    $("#title_show").html("<p>Chart with</p>")
-     {% for friend in user.friend.all %}
-    $("#list").html.append("<p><img src={{friend.image}} width='40%' height='70%'> &nbsp;&nbsp; {{ friend.name }} </p>") 
-    {% endfor %}
-})
+	alert("chart_with");
+	$("#title_show").html("<h3>Friends Chart With Rescently</h3>");
+	$("#list").html("");
+	var i=0;
+	{% for chart_with_rescently in chart_with %}
+		{% if chart_with_rescently|length_is:1 %}
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='friendname'><span class='friendname'>&nbsp;&nbsp;{{ chart_with_rescently.0.name }}</span></div></div>")
 
+		{% elif chart_with_rescently|length_is:2 %}
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_2_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_2_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div></div><div class='friendname'><span class='friendname'>&nbsp;&nbsp;{{ chart_with_rescently.0.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}</span></div></div>")
+		{% elif chart_with_rescently|length_is:3 %}
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_3_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_3_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div><div class='image_area_3_3'><span class='imgset'></span><img src={{ chart_with_rescently.3.image }} width='50%' height='80%'></div></div><div class='friendname'><span class='friendname'>&nbsp;&nbsp;{{ chart_with_rescently.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}&nbsp;|&nbsp;{{ chart_with_rescently.2.name}}</span></div></div>")
+		{% elif chart_with_rescently|length_is:4 %}
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_4_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_4_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div><div class='image_area_4_3'><span class='imgset'></span><img src={{ chart_with_rescently.3.image }} width='50%' height='80%'></div><div class='image_area_4_4'><p>...</p></div></div><div class='friendname'><span class='friendname'>&nbsp;|&nbsp;{{ chart_with_rescently.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}&nbsp;|&nbsp;{{ chart_with_rescently.2.name}}&nbsp;|&nbsp;{{ chart_with_rescently.3.name}}</span></div></div>")
+		{% endif %}
+		i=i+1;
+	{% endfor %}
+
+})	
+
+// return status of friends and others which allow to be saw.
 $("#status").click(function() {
-    alert("123")
-    $("#list").html("<p>status list of friends</p>")
-    $("#title_show").html("<p>Status of friends </p>") 
-    {% for friend in user.friend.all %}
-    $("#list").html.append("<p><img src={{friend.image}} width='40%' height='70%'> &nbsp;&nbsp; {{ friend.name }} </p>") 
+	alert("status");
+	$('#title_show').html("<h3>Status of Friends</h3>");
+	$("#list").html("");
+	{% for status_show in status %}
+		$("#list").append("<div class='friend_info status'><div class='status_friend_info'><div class='status_friend_image'><span class='imgset'></span><img src={{ status_show.pubperson.image }} width='60%' height='100%'></div><div class='status_friend_name'><p>{{ status_show.pubperson.name }}</p></div></div><div class='status_content'><p>{{ status_show.pubtext }}</p></div></div>")
+	{% endfor %}
+})
+
+// return friend list
+$("#friend_list").click(function() {
+    $("#title_show").html("<h3>Friend's Information </h3") 
+    $("#list").html("")
+	{% for friend in user.friend.all %}
+    	$("#list").append("<div class='friend_info friend_list'><div class='friendimage'><span class='imgset'></span><img src={{friend.image}} width='50%' height='80%'></div><div  class='friendname'><span class='friendname'> &nbsp;&nbsp; {{ friend.name }} </span></div></div>") 
     {% endfor %}
 })
 
-$("#friend_list").click(function() {
-    alert("123")
-    $("#list").html("<p>friend list of mine</p>")
-    $("#title_show").html("<p>friend's information </p>") 
-    {% for friend in user.friend.all %}
-    $("#list").html.append("<p><img src={{friend.image}} width='40%' height='70%'> &nbsp;&nbsp; {{ friend.name }} </p>") 
-    {% endfor %}
+
+$("#list").on('click','.friend_info',function(e){
+	alert($(this).children()[0].className)
+	$("#title_show").html("")
+	alert($(this).closest('.friend_info')[0].className)
+	if (($(this).closest('.friend_info')[0].className).indexOf("friend_list")>=0){
+		$("#title_show").html("<h3>"+$(this).children()[1].innerText+"</h3>");
+		$('#content_body').html('');
+		$('#content_body').css('background-color','white');
+		if ($('#history').length>0){}
+			else{
+				$('#text_input').append('<button id="history" class="input_submit friend_chart_history">History</button>')
+			}
+	}else if(($(this).closest('.friend_info')[0].className).indexOf("status")>=0){
+		$('#title_show').html("<h3>"+ $(this).children()[0].innerText+"</h3>");
+		var status_from_name=$(this).children()[0].innerText;
+		alert(status_from_name)
+		{% for i in status %}
+			if ({{i.pubperson}} == status_from_name){
+
+				$("#content_body").html("<h3> {{i.pubtime}}</h3><p>{{i.pubtext}}</p>")
+			}		
+		{% endfor %}
+	}else if(($(this).closest('.friend_info')[0].className).indexOf("chart_with")>=0){	
+		$("#title_show").html("<h3>"+$(this).children()[1].innerText+"</h3>");
+		var chart_friend=($(this).children()[1].innerText).split("|")
+		{% for i in chart_massage %}
+			var person_list="{{i.toperson.all|safe}}"
+			alert(person_list)
+			if (person_list.sort().tostring()==chart_friend.sort().tostring()){
+				$("#content_body").html("{{ i.textcontent }}")
+			}
+		{% endfor %}
+
+	}	
 })
+
+// set mouseover background-color
+$("#list").on("mouseover",'.friend_info',function(e){
+	($(this).closest('.friend_info')).css('background-color','green')
+})
+// set mouseleave background-color
+$('#list').on("mouseleave",'.friend_info',function(e){
+	($(this).closest('.friend_info')).css('background-color','')
+})
+
 </script>
 
 </html>

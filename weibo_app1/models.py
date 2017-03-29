@@ -3,6 +3,7 @@ from datetime import *
 import hashlib
 from django import forms
 import time
+from weibo.settings import MEDIA_ROOT
 # Create your models here.
 sexset=(
 		('male','male'),
@@ -22,7 +23,7 @@ class person(models.Model):
 	tofind=models.BooleanField("To be find by stranges or not.",default='True')
 
 	friend=models.ManyToManyField('self',symmetrical=False,blank=True)
-	image=models.ImageField(upload_to="/media/userimage/",blank=True,null=True)
+	image=models.ImageField(upload_to=MEDIA_ROOT+"/userimage/",blank=True,null=True)
 	online=models.BooleanField(default="False")
 
 
@@ -51,15 +52,15 @@ class person_sign_up_form(forms.ModelForm):
 
 class massage(models.Model):
 
-	fromperson=models.OneToOneField(person)
-	toperson=models.CharField(max_length=50)
+	fromperson=models.ForeignKey(person,related_name='massage_from')
+	toperson=models.ManyToManyField(person,related_name='massage_to')
 	textcontent=models.TextField(max_length=200,null=False,blank=False)
-	filecontent=models.FileField(upload_to="./massagefile/",null=True)
-	imagecontent=models.ImageField(upload_to="./massageimage/",null=True)
+	filecontent=models.FileField(upload_to=MEDIA_ROOT+"/massagefile/",null=True,blank=True)
+	imagecontent=models.ImageField(upload_to=MEDIA_ROOT+"/massageimage/",null=True,blank=True)
 	createtime=models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
-		return "from "+self.fromperson+" to "+self.toperson + " time "+datetime.strftime(self.createtime)
+		return self.textcontent+self.createtime.strftime("%Y-%m-%d %H:%M:%S")
 
 
 
@@ -69,11 +70,11 @@ status_view_permission=(("all","all"),("friend","friend"))
 class status(models.Model):
 
 	pubtime=models.DateTimeField(auto_now_add=True)
-	pubperson=models.OneToOneField(person,on_delete=models.CASCADE)
-	pubtext=models.TextField(max_length=200,null=False,blank=False)
-	pubimage=models.ImageField(upload_to='./pubimage/',null=True)
-	viewpermission=models.CharField(max_length=5, choices=status_view_permission,default="all")
+	pubperson=models.ForeignKey(person,on_delete=models.CASCADE)
+	pubtext=models.TextField(max_length=200,null=False,blank=True)
+	pubimage=models.ImageField(upload_to=MEDIA_ROOT+'/pubimage/',null=True,blank=True)
+	viewpermission=models.CharField(max_length=8, choices=status_view_permission,default="all")
 
 	def __str__(self):
-		return "from "+self.pubperson+" time "+datetime.strftime(self.pubtime)
+		return self.pubtext+self.pubtime.strftime("%Y-%m-%d %H:%M:%S")
 
