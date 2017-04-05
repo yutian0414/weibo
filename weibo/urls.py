@@ -28,5 +28,7 @@ urlpatterns = [
     url(r'^home/([^/]{1,20})/([^/]{0,100})/$', app1_views.home),
     url(r'^sign_in/',app1_views.sign_in),
     url(r'^chart_with_rescently/$',app1_views.chart_with_rescently),
+    url(r'^get_chart_masage/$',app1_views.getcharthistory),
+    url(r'^sendmassage/$',app1_views.sendmassage)
 ]
 urlpatterns+=static('/media/',document_root=MEDIA_ROOT)

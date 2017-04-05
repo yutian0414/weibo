@@ -12,8 +12,10 @@ import pickle
 import hashlib
 from django.http import JsonResponse
 from django.core.serializers import serialize
+import re
 # from weibo_app1.form import
 # Create your views here.
+
 def index(request):
 
 	return render(request,'index.html')
@@ -54,17 +56,28 @@ def home(request,*args):
 		chart_with=[]
 		chart_massage=[]
 		massages_ordered=massage.objects.order_by('createtime')
+		templist=[]
+
 		for masg in massages_ordered:
 			if masg.toperson==user:
-				chart_with.append(masg.fromperson.all())
+				l=[]
+				for i in masg.fromperson.all():
+					l.append(i.name)
+				if l not in templist:
+					chart_with.append(masg.fromperson.all())
+					templist.append(l)
 				chart_massage.append(masg_dict)
 			elif masg.fromperson==user:
-				chart_with.append(masg.toperson.all())
+				l=[]
+				for i in masg.toperson.all():
+					l.append(i.name)
+				if l not in templist:
+					chart_with.append(masg.toperson.all())
+					templist.append(l)
 				chart_massage.append(masg)
-			print("masg:",masg)
-			print("chart_with",chart_with)
 
-		return render(request,'home.html',{'user':user,"status":status_of_friends,"chart_with":chart_with,"chart_massage":chart_massage})
+		chart_with=set(chart_with)
+		return render(request,'home.html',{'user':user,"status":status_of_friends,"chart_with":chart_with,"chart_massage":chart_massage,"chart_friend_name":templist})
 	else:
 		return HttpResponseRedirect('/sign_in/')
 
@@ -142,3 +155,106 @@ def logout(request):
 	except KeyError:
 		pass
 	return HttpResponse("You're logged out")
+
+@csrf_exempt
+def getcharthistory(request):
+	if request.is_ajax():
+		if request.method=="POST":
+			username=request.POST["username"]
+			friendname_list=re.split(r'\s\|\s',request.POST["friend_list"])
+			friend_list=[]
+			print(friendname_list)
+			username=person.objects.get(name=username)
+			for j in friendname_list:
+				friend_list.append(person.objects.get(name=j))
+			query1=massage.objects.filter(fromperson__exact=username)
+			query2=massage.objects.filter(toperson__exact=username)
+			for i in friendname_list:
+				query1=query1.filter(toperson__exact=i)
+				query2=query2.filter(toperson__exact=i)
+
+			masg=query1 | query2
+			print("masg::",masg)
+			masg=masg.distinct()
+			masg=masg.order_by('createtime')
+			masg_dic_temp=massage_to_dic(masg)
+			print(masg_dic_temp)
+			masg_dic={}
+			for item,val in masg_dic_temp.items():
+				if val["fromperson"]==username.name:
+					if len(val["toperson"])!=len(friend_list):
+						pass
+					else:
+						masg_dic[item]=val
+				elif username.name in val['toperson']:
+					if len(val['toperson'])!=len(friend_list):
+						pass
+					else:
+						masg_dic[item]=val
+				else:
+					raise ValueError("ERROR")
+
+			response=JsonResponse(masg_dic,safe=False)
+			response['Access-Control-Allow-Origin']='*'
+			return response
+
+@csrf_exempt
+def sendmassage(request):
+	if request.is_ajax():
+		if request.method=="POST":
+			username=request.POST['username']
+			topersonname=request.POST['sendto']
+			textcontent=request.POST['text']
+			fromperson=person.objects.get(name=username)
+			toperson=[]
+			for pe in re.split(r"\s\|\s",topersonname):
+				print(pe,len(pe),type(pe))
+				try:
+					toperson.append(person.objects.get(name=pe))
+				except:
+					toperson=[]
+					break
+			if textcontent!='' and toperson:
+				massage_get=massage()
+				massage_get.fromperson=fromperson
+				createtime=datetime.now()
+				print(toperson)
+
+				massage_get.textcontent=textcontent
+				massage_get.createtime=createtime
+				massage_get.save()
+				for e in toperson:
+					massage_get.toperson.add(e)
+				massage_get.save()
+				return JsonResponse({'sended':"Sended",'textcontent':textcontent,'createtime':createtime})
+			else:
+				masg=massage.objects.filter(toperson=username)
+				masg_dic=massage_to_dic(masg)
+				response=JsonResponse(masg_dic,safe=False)
+				response['Access-Control-Allow-Origin']='*'
+
+				return response
+
+def massage_to_dic(masg):
+	masg_dic={}
+	temp={}
+	j=0
+	for i in masg:
+
+		print(i)
+		name=[]
+		temp={}
+		print(i.toperson.all())
+		for em in i.toperson.all():
+			name.append(em.name)
+		temp["toperson"]=name
+		temp['fromperson']=str(i.fromperson_id)
+		temp['createtime']=str(i.createtime)
+		temp['textcontent']=i.textcontent
+		temp['filecontent']=str(i.filecontent)
+		temp['imagecontent']=str(i.imagecontent)
+
+		masg_dic[str(j)]=temp
+		j=j+1
+	print(masg_dic)
+	return masg_dic

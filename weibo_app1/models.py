@@ -11,7 +11,7 @@ sexset=(
 	)
 class person(models.Model):
 	"""person information which is not change very offen"""
-	name=models.CharField('account name',max_length=50,unique=True)
+	name=models.CharField('account name',max_length=50,unique=True,primary_key=True)
 	sex=models.CharField(max_length=10,choices=sexset)
 	birth=models.DateField()
 	signdate=models.DateField(auto_now_add=True)
@@ -58,6 +58,7 @@ class massage(models.Model):
 	filecontent=models.FileField(upload_to=MEDIA_ROOT+"/massagefile/",null=True,blank=True)
 	imagecontent=models.ImageField(upload_to=MEDIA_ROOT+"/massageimage/",null=True,blank=True)
 	createtime=models.DateTimeField(auto_now_add=True)
+
 
 	def __str__(self):
 		return self.textcontent+self.createtime.strftime("%Y-%m-%d %H:%M:%S")

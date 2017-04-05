@@ -15,9 +15,9 @@
         float: left;
         width: 30%;
         height: 100%;
+        border-style: solid;
         background-color: red;
         border-color: black;
-        border-width: 5px;
 		margin: 0px;
 		padding: 0px;
 		box-sizing: border-box;
@@ -81,6 +81,7 @@
         margin: 0px;
         padding: 0px;
         box-sizing: border-box;
+        overflow-y: auto;
     }
     
     #text_input {
@@ -155,7 +156,7 @@
 		height: 10%;
 		width: 100%;
 		float: left;
-		border-style: solid;
+		border-bottom: solid;
 		text-align: center;
 		box-sizing: border-box;
     }
@@ -206,10 +207,16 @@
 	.status_friend_image img{
 		vertical-align: middle;
 	}
-	.image_2_1 .image_2_2 .image_3_1 .image_3_2 .image_3_3 .image_4_1 .image_4_2 .image_4_3 .image_4_4{
+	.image_area_2_1,.image_area_2_2{
 		width: 50%;
 		float: left;
 		height: 100%;
+		text-align: center;
+	}
+	.image_area_3_1, .image_area_3_2, .image_area_3_3, .image_area_4_1, .image_area_4_2, .image_area_4_3, .image_area_4_4{
+		width: 50%;
+		float: left;
+		height: 50%;
 		text-align: center;
 	}
 	.text_input_area{
@@ -224,7 +231,39 @@
 		text-align: center;
 		float: right;
 	}
+	.massage{
+		width: 100%;
+		height: 100px;
+		margin: auto; 
+		border-style: 
+		margin:0px;
+		padding: 0px;
 
+	}
+	.content{
+
+		width: 90%;
+		height: 70%;
+		font-size: 20px;
+		font-weight: bold;
+		color: orange;
+		margin: auto;
+	}
+	.sendtime{
+		width: 90%;
+		height: 30%;
+		font-size: 10px;
+		font-style: italic;
+		margin: auto;
+	}
+	.left{
+		text-align: left;
+		background: rgba(115,115,115,0.3)
+	}
+	.right{
+		text-align: right;
+		background: rgba(215,215,215,0.3);
+	}
     </style>
     <title>weibo of {{ user.name }}</title>
 </head>
@@ -272,7 +311,7 @@
                 <br>
             </div>
             <div id="text_input">
-            	<form>
+            	<form id="sendmassage">
             		<textarea class="text_input_area">
             			
             		</textarea>
@@ -289,6 +328,9 @@
 </body>
 <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
+var massage_flag=[]
+var status_flag=[]
+
 
 // return friend list chart with rescently.
 $("#chart_with").click(function() {
@@ -298,14 +340,14 @@ $("#chart_with").click(function() {
 	var i=0;
 	{% for chart_with_rescently in chart_with %}
 		{% if chart_with_rescently|length_is:1 %}
-			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='friendname'><span class='friendname'>&nbsp;&nbsp;{{ chart_with_rescently.0.name }}</span></div></div>")
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='friendname'><span class='friendname'>{{ chart_with_rescently.0.name }}</span></div></div>")
 
 		{% elif chart_with_rescently|length_is:2 %}
-			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_2_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_2_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div></div><div class='friendname'><span class='friendname'>&nbsp;&nbsp;{{ chart_with_rescently.0.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}</span></div></div>")
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_2_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_2_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div></div><div class='friendname'><span class='friendname'>{{ chart_with_rescently.0.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}</span></div></div>")
 		{% elif chart_with_rescently|length_is:3 %}
-			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_3_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_3_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div><div class='image_area_3_3'><span class='imgset'></span><img src={{ chart_with_rescently.3.image }} width='50%' height='80%'></div></div><div class='friendname'><span class='friendname'>&nbsp;&nbsp;{{ chart_with_rescently.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}&nbsp;|&nbsp;{{ chart_with_rescently.2.name}}</span></div></div>")
-		{% elif chart_with_rescently|length_is:4 %}
-			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_4_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_4_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div><div class='image_area_4_3'><span class='imgset'></span><img src={{ chart_with_rescently.3.image }} width='50%' height='80%'></div><div class='image_area_4_4'><p>...</p></div></div><div class='friendname'><span class='friendname'>&nbsp;|&nbsp;{{ chart_with_rescently.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}&nbsp;|&nbsp;{{ chart_with_rescently.2.name}}&nbsp;|&nbsp;{{ chart_with_rescently.3.name}}</span></div></div>")
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_3_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_3_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div><div class='image_area_3_3'><span class='imgset'></span><img src={{ chart_with_rescently.3.image }} width='50%' height='80%'></div></div><div class='friendname'><span class='friendname'>{{ chart_with_rescently.0.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}&nbsp;|&nbsp;{{ chart_with_rescently.2.name}}</span></div></div>")
+		{% elif chart_with_rescently|length >= 4 %}
+			$("#list").append("<div class='friend_info chart_with'><div class='friendimage'><div class='image_area_4_1'><span class='imgset'></span><img src={{ chart_with_rescently.0.image }} width='50%' height='80%'></div><div class='image_area_4_2'><span class='imgset'></span><img src={{ chart_with_rescently.1.image }} width='50%' height='80%'></div><div class='image_area_4_3'><span class='imgset'></span><img src={{ chart_with_rescently.3.image }} width='50%' height='80%'></div><div class='image_area_4_4'><p>...</p></div></div><div class='friendname'><span class='friendname'>{{ chart_with_rescently.0.name }}&nbsp;|&nbsp;{{ chart_with_rescently.1.name}}&nbsp;|&nbsp;{{ chart_with_rescently.2.name}}&nbsp;|&nbsp;...</span></div></div>")
 		{% endif %}
 		i=i+1;
 	{% endfor %}
@@ -339,7 +381,6 @@ $("#list").on('click','.friend_info',function(e){
 	if (($(this).closest('.friend_info')[0].className).indexOf("friend_list")>=0){
 		$("#title_show").html("<h3>"+$(this).children()[1].innerText+"</h3>");
 		$('#content_body').html('');
-		$('#content_body').css('background-color','white');
 		if ($('#history').length>0){}
 			else{
 				$('#text_input').append('<button id="history" class="input_submit friend_chart_history">History</button>')
@@ -356,14 +397,26 @@ $("#list").on('click','.friend_info',function(e){
 		{% endfor %}
 	}else if(($(this).closest('.friend_info')[0].className).indexOf("chart_with")>=0){	
 		$("#title_show").html("<h3>"+$(this).children()[1].innerText+"</h3>");
-		var chart_friend=($(this).children()[1].innerText).split("|")
-		{% for i in chart_massage %}
-			var person_list="{{i.toperson.all|safe}}"
-			alert(person_list)
-			if (person_list.sort().tostring()==chart_friend.sort().tostring()){
-				$("#content_body").html("{{ i.textcontent }}")
+		$("#content_body").html('')
+		var chart_friend=($(this).children()[1].innerText).toString()
+		console.log(chart_friend)
+		$.post("/get_chart_masage/",{
+			"username":{{ user.name }},
+			"friend_list":chart_friend,
+		},function(ret){
+			for (var i in ret){
+				console.log(ret[i])
+				console.log(ret[i].toperson.toString())
+				console.log({{ user.name }})
+				console.log(ret[i].toperson.toString() == '{{ user.name|safe }}')
+				if (ret[i].toperson.toString() == '{{ user.name|safe }}'){
+					$("#content_body").append('<div class="massage left"><div class="content"><p>' + ret[i].textcontent +'</p></div><div class="sendtime"><p>'+ ret[i].createtime +'</p></div></div>')
+				}else{
+					$("#content_body").append('<div class="massage right"><div class="content"><p>' + ret[i].textcontent +'</p></div><div class="sendtime"><p>'+ ret[i].createtime +'</p></div></div>')
+				}
 			}
-		{% endfor %}
+
+		})
 
 	}	
 })
@@ -377,6 +430,46 @@ $('#list').on("mouseleave",'.friend_info',function(e){
 	($(this).closest('.friend_info')).css('background-color','')
 })
 
+$(document).ready(function(){
+	{% for i in chart_massage %}
+		massage_flag.push('{{ i }}'.toString());
+	{% endfor %}
+	{% for i in status %}
+		status_flag.push('{{ i }}'.toString());
+	{% endfor %}
+	console.log(massage_flag)
+	console.log(status_flag)
+})
+
+$("#input").click(function(){
+var sendto=$("#title_show").text();
+var text=$('.text_input_area').val();
+$.post('/sendmassage/',{
+	'sendto':sendto,
+	'text':text,
+	'username':{{ user.name }}
+
+},function(ret){
+	if (ret["sended"]=='Sended'){
+		$("#content_body").append('<div class="massage right"><div class="content"><p>' + ret["textcontent"] +'</p></div><div class="sendtime"><p>'+ ret["createtime"] +'</p></div></div>')
+	}else{
+		for (i in ret){
+			if (i.toString() in massage_flag){
+				
+			}else{
+				if ((i['fromperson'] in '{{ chart_friend_name }}') || (i['toperson'] in '{{ chart_friend_name }}')){
+					if (i['toperson']==$('#title_show').text()){
+						$("#content_body").append('<div class="massage right"><div class="content"><p>' + i["textcontent"] +'</p></div><div class="sendtime"><p>'+ i["createtime"] +'</p></div></div>')
+					}else{
+
+					}
+				}
+			}
+		}
+	}
+})
+
+}) 
 </script>
 
 </html>
